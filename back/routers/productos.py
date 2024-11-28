@@ -9,6 +9,8 @@ from typing import List
 router = APIRouter()
 
 # Dependencia para la sesión de la base de datos
+
+
 def get_db():
     db = SessionLocal()
     try:
@@ -23,7 +25,8 @@ def create_producto(
     descripcion: str = Form(...),
     sku: str = Form(...),
     categoria_id: int = Form(...),
-    disponible_en: str = Form(...),  # Recibe un JSON en formato string (ej. '["delivery", "takeaway"]')
+    # Recibe un JSON en formato string (ej. '["delivery", "takeaway"]')
+    disponible_en: str = Form(...),
     precio_unico: bool = Form(True),  # Valor por defecto
     valor_precio: float = Form(...),
     tiene_descuento: bool = Form(False),  # Valor por defecto
@@ -31,21 +34,26 @@ def create_producto(
     db: Session = Depends(get_db)
 ):
     # Validar si la categoría existe
-    categoria = db.query(CategoriaModel).filter(CategoriaModel.id == categoria_id).first()
+    categoria = db.query(CategoriaModel).filter(
+        CategoriaModel.id == categoria_id).first()
     if not categoria:
-        raise HTTPException(status_code=400, detail="La categoría especificada no existe")
+        raise HTTPException(
+            status_code=400, detail="La categoría especificada no existe")
 
     # Validar y convertir el campo disponible_en desde string a lista JSON
     try:
-        disponible_en_list = eval(disponible_en)  # Convierte el string en una lista
+        # Convierte el string en una lista
+        disponible_en_list = eval(disponible_en)
         if not isinstance(disponible_en_list, list):
             raise ValueError
         # Validar que los valores de disponible_en sean válidos según el Enum
         for valor in disponible_en_list:
             if valor not in [e.value for e in Disponibilidad]:
-                raise ValueError(f"Valor '{valor}' no es válido para disponibilidad")
+                raise ValueError(
+                    f"Valor '{valor}' no es válido para disponibilidad")
     except (ValueError, SyntaxError):
-        raise HTTPException(status_code=400, detail="El campo 'disponible_en' debe ser una lista válida de valores de disponibilidad")
+        raise HTTPException(
+            status_code=400, detail="El campo 'disponible_en' debe ser una lista válida de valores de disponibilidad")
 
     # Guardar la imagen si fue enviada
     file_location = None
@@ -87,4 +95,25 @@ def read_producto(producto_id: int, db: Session = Depends(get_db)):
 def list_productos(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     limit = min(limit, 50)  # Limitar máximo a 50
     productos = db.query(ProductoModel).offset(skip).limit(limit).all()
+    return productos
+
+
+@router.get("/categoria/{categoria_id}", response_model=List[Producto])
+def list_productos_por_categoria(
+    categoria_id: int,
+    skip: int = 0,
+    limit: int = 10,
+    db: Session = Depends(get_db)
+):
+    """
+    Lista productos pertenecientes a una categoría específica.
+    """
+    limit = min(limit, 50)  # Limitar máximo a 50 productos
+    productos = (
+        db.query(ProductoModel)
+        .filter(ProductoModel.categoria_id == categoria_id)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
     return productos

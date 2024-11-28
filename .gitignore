@@ -1,7 +1,6 @@
 notes.md
-__pycache__/
+__pycache__
 /venv
-/back/__pycache__
 /back/restaurant.db
 
 # Logs
