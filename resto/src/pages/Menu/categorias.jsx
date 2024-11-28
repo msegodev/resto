@@ -11,9 +11,21 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import CategoriasModal from "./modals";
+import { crearCategoria } from "../../services/productos/categoriaService";
 
 const CategoriasPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  // Función onSubmit que se pasa al modal
+  const handleCreateCategoria = async (data) => {
+    try {
+      const nuevaCategoria = await crearCategoria(data); // Llamada a la API para crear la categoría
+      console.log("Categoría creada:", nuevaCategoria); // Maneja el nuevo producto creado
+      // Aquí puedes actualizar el estado o hacer algo más con la nueva categoría.
+    } catch (error) {
+      console.error("Error al crear la categoría:", error);
+    }
+  };
 
   return (
     <Box px={"12"}>
@@ -46,7 +58,11 @@ const CategoriasPage = () => {
         </VStack>
       </Alert>
 
-      <CategoriasModal isOpen={isOpen} onClose={onClose} />
+      <CategoriasModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onSubmit={handleCreateCategoria}
+      />
     </Box>
   );
 };

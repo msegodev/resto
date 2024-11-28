@@ -10,7 +10,7 @@ const Layout = () => {
       <Sidebar />
 
       {/* MAIN LAYOUT */}
-      <Box flex="1" bgImage={background} bgSize={"auto"} bgColor={"lavender"}>
+      <Box flex="1" bgImage={background} bgSize={"auto"} bgColor={"#eee"}>
         <Navbar />
         <Box p={4}>
           {/* NESTED ROUTES */}

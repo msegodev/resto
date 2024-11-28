@@ -9,13 +9,6 @@ class Disponibilidad(PyEnum):
     SALON = "salon"
     TAKEAWAY = "takeaway"
 
-class Categoria(Base):
-    __tablename__ = "categorias"
-
-    id = Column(Integer, primary_key=True, index=True)
-    nombre = Column(String, index=True)
-    productos = relationship("Producto", back_populates="categoria")
-
 class Producto(Base):
     __tablename__ = "productos"
 
