@@ -22,6 +22,7 @@ const CustomForm = ({
   control,
   value,
   setValue,
+  categorias,
 }) => {
   return (
     <form id="producto-form" onSubmit={handleSubmit(onSubmit)}>
@@ -59,9 +60,11 @@ const CustomForm = ({
           bg={"white"}
           {...register("categoria")}
         >
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-          <option value="option3">Option 3</option>
+          {categorias.map((categoria, index) => (
+            <option key={index} value={categoria.id}>
+              {categoria.nombre}
+            </option>
+          ))}
         </Select>
       </FormControl>
 

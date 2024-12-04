@@ -13,6 +13,7 @@ import {
   Tag,
   Text,
   useDisclosure,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import CategoriasModal from "./modals";
@@ -25,6 +26,7 @@ import { useEffect, useState } from "react";
 const CategoriasPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [categorias, setCategorias] = useState();
+  const toast = useToast();
 
   const getCategorias = async () => {
     let data = await listarCategorias();
@@ -40,6 +42,13 @@ const CategoriasPage = () => {
     try {
       await crearCategoria(data);
       getCategorias();
+      toast({
+        title: "Éxito",
+        description: "La categoría ha sido creada.",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
     } catch (error) {
       console.error("Error al crear la categoría:", error);
     }

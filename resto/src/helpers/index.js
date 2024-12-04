@@ -19,5 +19,11 @@ const obtenerFechaActual = () => {
   console.log(obtenerFechaActual());
   // Ejemplo de salida: "martes, 26 de noviembre de 2024"
   
+const formatNumberToARS = (number) => {
+    return new Intl.NumberFormat('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(number);
+}
   
-export {obtenerFechaActual}
+export {obtenerFechaActual, formatNumberToARS}

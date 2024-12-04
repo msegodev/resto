@@ -17,6 +17,7 @@ import {
   Wrap,
 } from "@chakra-ui/react";
 import qrcode from "../../assets/qrcode.png";
+import { NavLink } from "react-router-dom";
 
 const cards = [
   {
@@ -81,7 +82,9 @@ const DashboardPage = () => {
               <Heading size="lg">Mi Menú</Heading>
 
               <HStack>
-                <Button>Vista previa</Button>
+                <NavLink target="_blank" to={"/preview"}>
+                  <Button>Vista previa</Button>
+                </NavLink>
                 <Button>Compartir</Button>
               </HStack>
             </Stack>

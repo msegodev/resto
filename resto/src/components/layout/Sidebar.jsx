@@ -23,7 +23,7 @@ import {
 const Sidebar = () => {
   return (
     <Box
-      w="240px"
+      minW="240px"
       bg="white"
       boxShadow="md"
       h="100vh"
@@ -67,7 +67,6 @@ const Sidebar = () => {
             </AccordionButton>
             <AccordionPanel pb={4}>
               <VStack align="start" spacing={2}>
-                {/* Reemplazando <Link> por <NavLink> */}
                 <NavLink
                   to="/pedidos/activos"
                   style={({ isActive }) => ({
