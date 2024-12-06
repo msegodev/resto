@@ -8,6 +8,7 @@ import ProductosPage from "./pages/Menu/productos";
 import AdicionalesPage from "./pages/Menu/adicionales";
 import ProductosAgregarPage from "./pages/Menu/productosAgregar";
 import MenuPreviewPage from "./pages/MenuPreview/MenuPreviewPage";
+import ProductDetailPage from "./pages/MenuPreview/ProductDetailPage";
 
 const AppRoutes = () => {
   return (
@@ -19,12 +20,13 @@ const AppRoutes = () => {
       <Route path="*" element={<Navigate to="/dashboard" />} />
 
       {/* Carta */}
-      <Route path="/preview" element={<MenuPreviewPage />} />
+      <Route path="/preview" element={<MenuPreviewPage />}></Route>
+      <Route path="/preview/product/:id" element={<ProductDetailPage />} />
 
       {/* Dashboard */}
       <Route path="/dashboard" element={<MainLayout />}>
         <Route index element={<DashboardPage />} />
-        <Route path="preview" element={<MenuPreviewPage />} />{" "}
+        <Route path="preview" element={<MenuPreviewPage />} />
         {/* Nueva ruta */}
       </Route>
 

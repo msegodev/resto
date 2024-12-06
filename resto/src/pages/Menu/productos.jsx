@@ -10,6 +10,7 @@ import {
   CardHeader,
   Heading,
   HStack,
+  Image,
   Select,
   Stack,
   Text,
@@ -20,6 +21,7 @@ import { NavLink } from "react-router-dom";
 import { listarProductosPorCategoria } from "../../services/productos/productoService";
 import { listarCategorias } from "../../services/productos/categoriaService";
 import { formatNumberToARS } from "../../helpers";
+import preview from "../../assets/preview.png";
 
 const ProductosPage = () => {
   const [productos, setProductos] = useState([]);
@@ -28,7 +30,7 @@ const ProductosPage = () => {
 
   const handleChange = (e) => {
     const { value, name } = e.target;
-    console.log(e)
+    console.log(e);
     setCurrentCategoria({ id: value, name });
   };
 
@@ -105,7 +107,8 @@ const ProductosPage = () => {
                 Lista de productos vacía
               </AlertTitle>
               <AlertDescription>
-                Cree su primer producto para la categoría {currentCategoria.name}
+                Cree su primer producto para la categoría{" "}
+                {currentCategoria.name}
               </AlertDescription>
             </VStack>
           </Alert>
@@ -130,7 +133,12 @@ const ProductosPage = () => {
             <Card key={index} w={"lg"}>
               <HStack>
                 <CardHeader>
-                  <Box>IMG</Box>
+                  <Image
+                    rounded="xl"
+                    w="full"
+                    objectFit="cover"
+                    src={preview}
+                  />
                 </CardHeader>
 
                 <CardBody>

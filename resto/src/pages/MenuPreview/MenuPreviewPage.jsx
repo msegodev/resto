@@ -1,71 +1,87 @@
+// import { useState } from "react";
 import {
   Alert,
   AlertDescription,
   AlertIcon,
   AlertTitle,
   Box,
+  Divider,
   Flex,
   Heading,
-  Text,
+  useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import { NavLink } from "react-router-dom";
 import Header from "../../components/layout/Header";
-import Tabs from "../../components/layout/TabComponent";
-
-const Section = ({ id, title, children }) => {
-  return (
-    <Box id={id} py={8} px={4}>
-      <Heading size="lg" mb={4}>
-        {title}
-      </Heading>
-      <Text>{children}</Text>
-    </Box>
-  );
-};
+import menu from "./data";
+import ModalInfo from "./ModalInfo";
+import OrderInfoCard from "./components/OrderInfoCard";
+import ProductsByCategoryList from "./components/ProductsByCategoryList";
 
 const MenuPreviewPage = () => {
-  const sections = [
-    { id: "most-sold", label: "Lo más vendido", content: "Contenido 1" },
-    { id: "burgers", label: "Hamburguesas", content: "Contenido 2" },
-    { id: "fries", label: "Papas fritas", content: "Contenido 3" },
-  ];
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  // TODO: CONTROL DE TABS, AGREGAR PROP AL COMPONENT
+  // const [tabIndex, setTabIndex] = useState(0);
+
+  // const handleTabChange = (e) => {
+  //   setTabIndex(e.target.value);
+  // };
 
   return (
-    <Flex bgColor="#2d2c36">
-      <Box w="3xl" m="auto">
-        <Header />
-        <Alert
-          status="error"
-          color="white"
-          bgColor="#f64868"
-          flexDirection="row"
-          alignItems="center"
-          gap={2}
-        >
-          <AlertIcon color="white" boxSize="40px" />
+    <Box minH="100vh" bgColor="#2d2c36">
+      <Flex>
+        <Box w="3xl" m="auto">
+          <Header onOpen={onOpen} showIcons showLogo />
+          <Alert
+            status="error"
+            color="white"
+            bgColor="#f64868"
+            flexDirection="row"
+            alignItems="center"
+            gap={2}
+          >
+            <AlertIcon color="white" boxSize="36px" />
 
-          <VStack w={"full"} align={"flex-start"}>
-            <AlertTitle fontSize="lg">
-              El local está temporalmente cerrado.
-            </AlertTitle>
-            <AlertDescription>
-              horarios de atencion de 19:30 a 23:00hs.
-            </AlertDescription>
-          </VStack>
-        </Alert>
+            <VStack w={"full"} align={"flex-start"}>
+              <AlertTitle fontSize="lg">
+                El local está temporalmente cerrado.
+              </AlertTitle>
+              <AlertDescription>
+                horarios de atencion de 19:30 a 23:00hs.
+              </AlertDescription>
+            </VStack>
+          </Alert>
 
-        <Tabs sections={sections} />
-        <Box mt="100px">
-          {" "}
-          {/* Espacio para el header y las tabs */}
-          {sections.map((section) => (
-            <Section key={section.id} id={section.id} title={section.label}>
-              {section.content}
-            </Section>
-          ))}
+          <OrderInfoCard />
+
+          <Box>
+            {menu.map((item, index) => {
+              return (
+                <Box key={index} color="white">
+                  <Heading size="lg" my={2}>
+                    {item.categoria}
+                  </Heading>
+                  <Divider />
+
+                  <Box>
+                    {item.items &&
+                      item.items.map((product, index) => (
+                        <NavLink
+                          key={index}
+                          to={`/preview/product/${product.id}`}
+                        >
+                          <ProductsByCategoryList product={product} />
+                        </NavLink>
+                      ))}
+                  </Box>
+                </Box>
+              );
+            })}
+          </Box>
         </Box>
-      </Box>
-    </Flex>
+      </Flex>
+      <ModalInfo isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+    </Box>
   );
 };
 
