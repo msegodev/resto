@@ -29,9 +29,10 @@ const ProductosPage = () => {
   const [currentCategoria, setCurrentCategoria] = useState({});
 
   const handleChange = (e) => {
-    const { value, name } = e.target;
-    console.log(e);
-    setCurrentCategoria({ id: value, name });
+    const selectedCategoria = categorias.find(
+      (categoria) => categoria.id === parseInt(e.target.value)
+    );
+    setCurrentCategoria(selectedCategoria || {}); // Actualiza `currentCategoria` con el objeto completo.
   };
 
   useEffect(() => {
@@ -49,7 +50,9 @@ const ProductosPage = () => {
       setProductos(data);
     };
 
-    Object.keys(currentCategoria).length && getProductos();
+    if (currentCategoria.id) {
+      getProductos();
+    }
   }, [currentCategoria]);
   return (
     <Box px={"12"}>
@@ -64,7 +67,9 @@ const ProductosPage = () => {
             textDecoration: "none",
           })}
         >
-          <Button isDisabled={!categorias.length}>Agregar</Button>
+          <Button colorScheme="purple" isDisabled={!categorias.length}>
+            Agregar
+          </Button>
         </NavLink>
       </HStack>
 
@@ -78,7 +83,7 @@ const ProductosPage = () => {
           w="2xs"
         >
           {categorias.map((categoria, index) => (
-            <option key={index} id={categoria.nombre} value={categoria.id}>
+            <option key={index} value={categoria.id}>
               {categoria.nombre}
             </option>
           ))}
@@ -107,7 +112,7 @@ const ProductosPage = () => {
                 Lista de productos vacía
               </AlertTitle>
               <AlertDescription>
-                Cree su primer producto para la categoría{" "}
+                Cree su primer producto para la categoría
                 {currentCategoria.name}
               </AlertDescription>
             </VStack>
@@ -128,28 +133,31 @@ const ProductosPage = () => {
           </AlertDescription>
         </VStack> */}
 
-        {productos &&
-          productos.map((producto, index) => (
-            <Card key={index} w={"lg"}>
-              <HStack>
-                <CardHeader>
-                  <Image
-                    rounded="xl"
-                    w="full"
-                    objectFit="cover"
-                    src={preview}
-                  />
-                </CardHeader>
+        {productos && (
+          <VStack gap={4} align={"flex-start"}>
+            {productos.map((producto, index) => (
+              <Card key={index} w={"lg"}>
+                <HStack align="start">
+                  <CardHeader p={2}>
+                    <Image
+                      rounded="xl"
+                      w="full"
+                      objectFit="cover"
+                      src={preview}
+                    />
+                  </CardHeader>
 
-                <CardBody>
-                  <HStack justify={"space-between"}>
-                    <Text>{producto.nombre}</Text>
-                    <Text>$ {formatNumberToARS(producto.valor_precio)}</Text>
-                  </HStack>
-                </CardBody>
-              </HStack>
-            </Card>
-          ))}
+                  <CardBody py={2} pl={0}>
+                    <HStack justify={"space-between"}>
+                      <Text>{producto.nombre}</Text>
+                      <Text>$ {formatNumberToARS(producto.valor_precio)}</Text>
+                    </HStack>
+                  </CardBody>
+                </HStack>
+              </Card>
+            ))}
+          </VStack>
+        )}
       </Box>
     </Box>
   );

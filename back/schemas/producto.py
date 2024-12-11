@@ -10,13 +10,13 @@ class Disponibilidad(str, Enum):
 
 class ProductoBase(BaseModel):
     nombre: str
-    descripcion: Optional[str] = None
-    sku: str
+    descripcion: Optional[str]
+    sku: Optional[str]	
     disponible_en: List[Disponibilidad]
     precio_unico: bool
     valor_precio: float
     tiene_descuento: bool
-    imagen: Optional[str] = None
+    imagen: Optional[str]
     categoria_id: int
 
 class ProductoCreate(ProductoBase):

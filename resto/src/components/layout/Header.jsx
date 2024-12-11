@@ -14,8 +14,13 @@ const Header = ({ onOpen, showIcons = false, showLogo = false }) => {
       align="flex-start"
       gap="6"
       shadow="none"
+      bgGradient={!showLogo ? "linear(to-b, #0f0e12, #2d2c36)" : null}
     >
-      <HStack justify={!showLogo ? "center" : "normal"}>
+      <HStack
+        w="full"
+        textAlign="center"
+        justify={!showLogo ? "center" : "normal"}
+      >
         {showLogo && (
           <Box w="2xs">
             <Box pos="relative" top="0" left="0" w="20">
@@ -24,7 +29,7 @@ const Header = ({ onOpen, showIcons = false, showLogo = false }) => {
           </Box>
         )}
 
-        <Text pos="relative" fontSize="xl" color="white" fontWeight="bold">
+        <Text w="full" fontSize="xl" color="white" fontWeight="bold">
           La Burguesita
         </Text>
       </HStack>

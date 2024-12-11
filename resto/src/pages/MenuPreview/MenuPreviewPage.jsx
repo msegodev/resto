@@ -17,6 +17,8 @@ import menu from "./data";
 import ModalInfo from "./ModalInfo";
 import OrderInfoCard from "./components/OrderInfoCard";
 import ProductsByCategoryList from "./components/ProductsByCategoryList";
+import { useEffect } from "react";
+import { obtenerMenuCompleto } from "../../services/productos/productoService";
 
 const MenuPreviewPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -26,6 +28,19 @@ const MenuPreviewPage = () => {
   // const handleTabChange = (e) => {
   //   setTabIndex(e.target.value);
   // };
+
+  useEffect(() => {
+    const cargarMenu = async () => {
+      try {
+        const menu = await obtenerMenuCompleto();
+        console.log("Menú completo:", menu);
+      } catch (error) {
+        console.error("Error cargando el menú:", error);
+      }
+    };
+
+    cargarMenu();
+  }, []);
 
   return (
     <Box minH="100vh" bgColor="#2d2c36">

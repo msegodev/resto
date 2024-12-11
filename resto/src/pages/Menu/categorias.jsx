@@ -59,7 +59,9 @@ const CategoriasPage = () => {
       <HStack mb={"10"} justify={"space-between"} alignItems={"center"}>
         <Heading fontWeight={"black"}>Categorías</Heading>
 
-        <Button onClick={onOpen}>Agregar</Button>
+        <Button colorScheme="purple" onClick={onOpen}>
+          Agregar
+        </Button>
       </HStack>
 
       {!categorias && (

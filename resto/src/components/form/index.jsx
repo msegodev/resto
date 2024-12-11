@@ -25,9 +25,22 @@ const CustomForm = ({
   categorias,
 }) => {
   return (
-    <form id="producto-form" onSubmit={handleSubmit(onSubmit)}>
-      <FormControl isRequired isInvalid={!!errors.nombre}>
-        <FormLabel>Nombre</FormLabel>
+    <form
+      style={{
+        width: "100%",
+        gap: 30,
+        display: "flex",
+        direction: "column",
+        flexWrap: "wrap",
+      }}
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <FormControl
+        id="producto-form"
+        isRequired
+        isInvalid={!!errors.nombre}
+      >
+        <FormLabel color="#4A5568">Nombre</FormLabel>
         <Input
           type="text"
           bg={"white"}
@@ -39,26 +52,22 @@ const CustomForm = ({
       </FormControl>
 
       <FormControl>
-        <FormLabel>Descripción</FormLabel>
+        <FormLabel color="#4A5568">Descripción</FormLabel>
         <Textarea bg={"white"} {...register("descripcion")} />
       </FormControl>
 
-      <FormControl isRequired isInvalid={!!errors.sku}>
-        <FormLabel>SKU</FormLabel>
-        <Input
-          type="text"
-          bg={"white"}
-          {...register("sku", { required: "El SKU es requerido." })}
-        />
+      <FormControl w="3xs" isInvalid={!!errors.sku}>
+        <FormLabel color="#4A5568">SKU</FormLabel>
+        <Input type="text" bg={"white"} {...register("sku")} />
         <FormErrorMessage>{errors.sku?.message}</FormErrorMessage>
       </FormControl>
 
-      <FormControl isRequired>
-        <FormLabel>Categoria</FormLabel>
+      <FormControl w="xs" isRequired>
+        <FormLabel color="#4A5568">Categoria</FormLabel>
         <Select
           placeholder="Seleccione una categoria"
           bg={"white"}
-          {...register("categoria")}
+          {...register("categoria_id")}
         >
           {categorias.map((categoria, index) => (
             <option key={index} value={categoria.id}>
@@ -69,14 +78,14 @@ const CustomForm = ({
       </FormControl>
 
       <FormControl>
-        <FormLabel>Disponible en</FormLabel>
+        <FormLabel color="#4A5568">Disponible en</FormLabel>
         <Controller
-          name="disponibilidad"
+          name="disponible_en"
           control={control}
           defaultValue={[]}
           render={({ field }) => {
             return (
-              <CheckboxGroup colorScheme="green" {...field} ref={null}>
+              <CheckboxGroup {...field} ref={null}>
                 <Stack spacing={[1, 5]} direction={["column"]}>
                   <Checkbox value="delivery">Delivery</Checkbox>
                   <Checkbox value="salon">Salon</Checkbox>
@@ -88,30 +97,30 @@ const CustomForm = ({
         />
       </FormControl>
 
-      <FormControl>
-        <FormLabel>Precio</FormLabel>
+      <FormControl w={"3xs"}>
+        <FormLabel color="#4A5568">Precio</FormLabel>
         <RadioGroup onChange={setValue} value={value}>
           <Stack direction="row">
             <Radio value="1">Único</Radio>
             <Radio value="2">Múltiple</Radio>
           </Stack>
         </RadioGroup>
-        <Input bg={"white"} {...register("precio")} />
+        <Input bg={"white"} {...register("valor_precio")} />
       </FormControl>
 
-      <FormControl>
+      <FormControl hidden>
         <FormLabel>Imagen</FormLabel>
         <Input type="file" bg={"white"} {...register("imagen")} />
       </FormControl>
 
-      <FormControl>
-        <FormLabel>Visibilidad</FormLabel>
+      <FormControl hidden>
+        <FormLabel color="#4A5568">Visibilidad</FormLabel>
         {/* Aquí puedes agregar más controles si es necesario */}
       </FormControl>
 
-      <Button type="submit" mt={4}>
+      {/* <Button type="submit" mt={4}>
         Guardar
-      </Button>
+      </Button> */}
     </form>
   );
 };
