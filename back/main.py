@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from routers import menu, productos, category
 from database import engine
@@ -6,6 +7,9 @@ from models.producto import Base
 
 
 app = FastAPI()
+
+# Montar la carpeta 'static/images' en '/images'
+app.mount("/images", StaticFiles(directory="static/images"), name="images")
 
 # Configuración de CORS
 app.add_middleware(

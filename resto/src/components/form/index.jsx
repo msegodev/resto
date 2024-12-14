@@ -1,5 +1,5 @@
 import {
-  Button,
+  Box,
   Checkbox,
   CheckboxGroup,
   FormControl,
@@ -35,11 +35,7 @@ const CustomForm = ({
       }}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <FormControl
-        id="producto-form"
-        isRequired
-        isInvalid={!!errors.nombre}
-      >
+      <FormControl id="producto-form" isRequired isInvalid={!!errors.nombre}>
         <FormLabel color="#4A5568">Nombre</FormLabel>
         <Input
           type="text"
@@ -79,22 +75,24 @@ const CustomForm = ({
 
       <FormControl>
         <FormLabel color="#4A5568">Disponible en</FormLabel>
-        <Controller
-          name="disponible_en"
-          control={control}
-          defaultValue={[]}
-          render={({ field }) => {
-            return (
-              <CheckboxGroup {...field} ref={null}>
-                <Stack spacing={[1, 5]} direction={["column"]}>
-                  <Checkbox value="delivery">Delivery</Checkbox>
-                  <Checkbox value="salon">Salon</Checkbox>
-                  <Checkbox value="takeaway">Takeaway</Checkbox>
-                </Stack>
-              </CheckboxGroup>
-            );
-          }}
-        />
+        <Box bg={"white"} rounded={"xs"}>
+          <Controller
+            name="disponible_en"
+            control={control}
+            defaultValue={[]}
+            render={({ field }) => {
+              return (
+                <CheckboxGroup {...field} ref={null}>
+                  <Stack spacing={[1, 5]} direction={["column"]}>
+                    <Checkbox value="delivery">Delivery</Checkbox>
+                    <Checkbox value="salon">Salon</Checkbox>
+                    <Checkbox value="takeaway">Takeaway</Checkbox>
+                  </Stack>
+                </CheckboxGroup>
+              );
+            }}
+          />
+        </Box>
       </FormControl>
 
       <FormControl w={"3xs"}>
@@ -108,7 +106,7 @@ const CustomForm = ({
         <Input bg={"white"} {...register("valor_precio")} />
       </FormControl>
 
-      <FormControl hidden>
+      <FormControl>
         <FormLabel>Imagen</FormLabel>
         <Input type="file" bg={"white"} {...register("imagen")} />
       </FormControl>

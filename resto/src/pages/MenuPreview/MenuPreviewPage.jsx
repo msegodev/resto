@@ -13,15 +13,16 @@ import {
 } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import Header from "../../components/layout/Header";
-import menu from "./data";
+// import menu from "./data";
 import ModalInfo from "./ModalInfo";
 import OrderInfoCard from "./components/OrderInfoCard";
 import ProductsByCategoryList from "./components/ProductsByCategoryList";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { obtenerMenuCompleto } from "../../services/productos/productoService";
 
 const MenuPreviewPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [menu, setMenu] = useState([]);
   // TODO: CONTROL DE TABS, AGREGAR PROP AL COMPONENT
   // const [tabIndex, setTabIndex] = useState(0);
 
@@ -29,11 +30,13 @@ const MenuPreviewPage = () => {
   //   setTabIndex(e.target.value);
   // };
 
+  console.log(menu);
+
   useEffect(() => {
     const cargarMenu = async () => {
       try {
         const menu = await obtenerMenuCompleto();
-        console.log("Menú completo:", menu);
+        setMenu(menu);
       } catch (error) {
         console.error("Error cargando el menú:", error);
       }

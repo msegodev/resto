@@ -5,28 +5,38 @@ import {
   AlertTitle,
   Box,
   Button,
-  Card,
-  CardBody,
-  CardHeader,
   Heading,
   HStack,
-  Image,
   Select,
   Stack,
-  Text,
   VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { listarProductosPorCategoria } from "../../services/productos/productoService";
+import {
+  eliminarProducto,
+  listarProductosPorCategoria,
+} from "../../services/productos/productoService";
 import { listarCategorias } from "../../services/productos/categoriaService";
-import { formatNumberToARS } from "../../helpers";
 import preview from "../../assets/preview.png";
+import CardProductos from "../../components/ui/CardProductos";
 
 const ProductosPage = () => {
   const [productos, setProductos] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [currentCategoria, setCurrentCategoria] = useState({});
+
+  const handleDelete = async (id) => {
+    try {
+      await eliminarProducto(id);
+      const updatedProductos = productos.filter(
+        (producto) => producto.id !== id
+      );
+      setProductos(updatedProductos);
+    } catch (error) {
+      console.error("Error al eliminar el producto:", error);
+    }
+  };
 
   const handleChange = (e) => {
     const selectedCategoria = categorias.find(
@@ -54,6 +64,7 @@ const ProductosPage = () => {
       getProductos();
     }
   }, [currentCategoria]);
+
   return (
     <Box px={"12"}>
       <HStack mb={"10"} justify={"space-between"} alignItems={"center"}>
@@ -75,7 +86,7 @@ const ProductosPage = () => {
 
       <Stack mb={10}>
         <Select
-          placeholder="Seleccione una categoria"
+          placeholder="Todos"
           defaultValue={null}
           onChange={handleChange}
           value={currentCategoria.id}
@@ -119,7 +130,27 @@ const ProductosPage = () => {
           </Alert>
         )}
 
-        {/* <VStack
+        {productos && (
+          <VStack gap={4} align={"flex-start"}>
+            {productos.map((producto, index) => (
+              <CardProductos
+                key={index}
+                producto={producto}
+                preview={preview}
+                onClick={handleDelete}
+              />
+            ))}
+          </VStack>
+        )}
+      </Box>
+    </Box>
+  );
+};
+
+export default ProductosPage;
+
+{
+  /* <VStack
           w={"full"}
           alignItems={"flex-start"}
           justifyContent={"flex-start"}
@@ -131,36 +162,5 @@ const ProductosPage = () => {
             Para poder crear un producto primero debe crear una categoría. Una
             categoría es una agrupación de productos.
           </AlertDescription>
-        </VStack> */}
-
-        {productos && (
-          <VStack gap={4} align={"flex-start"}>
-            {productos.map((producto, index) => (
-              <Card key={index} w={"lg"}>
-                <HStack align="start">
-                  <CardHeader p={2}>
-                    <Image
-                      rounded="xl"
-                      w="full"
-                      objectFit="cover"
-                      src={preview}
-                    />
-                  </CardHeader>
-
-                  <CardBody py={2} pl={0}>
-                    <HStack justify={"space-between"}>
-                      <Text>{producto.nombre}</Text>
-                      <Text>$ {formatNumberToARS(producto.valor_precio)}</Text>
-                    </HStack>
-                  </CardBody>
-                </HStack>
-              </Card>
-            ))}
-          </VStack>
-        )}
-      </Box>
-    </Box>
-  );
-};
-
-export default ProductosPage;
+        </VStack> */
+}

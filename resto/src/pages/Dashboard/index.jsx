@@ -46,15 +46,19 @@ const DashboardPage = () => {
   return (
     <Box px={"12"}>
       <Heading mb={"10"}>Tablero</Heading>
-      <Text fontSize="2xl">Bienvenid@, Matias!</Text>
+      <Text fontSize="2xl" mb={"10"}>Bienvenid@, Burguesita!</Text>
 
       <Wrap spacing={"16"}>
         <Card w={"lg"} mb={"10"}>
           <CardHeader>
-            <Stack direction={"row"} justifyContent={"space-between"}>
-              <Heading size="lg">Tus ventas</Heading>
+            <Stack direction={"row"} align={"center"} justifyContent={"space-between"}>
+              <Heading size="md" color="#656566">
+                Tus ventas
+              </Heading>
 
-              <Button>Ver Informes</Button>
+              <Button h={"8"} colorScheme="purple" variant={"outline"} isDisabled>
+                Ver Informes
+              </Button>
             </Stack>
           </CardHeader>
 
@@ -78,14 +82,24 @@ const DashboardPage = () => {
 
         <Card w={"lg"}>
           <CardHeader>
-            <Stack direction={"row"} justifyContent={"space-between"}>
-              <Heading size="lg">Mi Menú</Heading>
+            <Stack
+              direction={"row"}
+              align={"center"}
+              justifyContent={"space-between"}
+            >
+              <Heading size="md" color={"#656566"}>
+                Mi Menú
+              </Heading>
 
               <HStack>
                 <NavLink target="_blank" to={"/preview"}>
-                  <Button>Vista previa</Button>
+                  <Button h="8" variant="outline" colorScheme="purple">
+                    Vista previa
+                  </Button>
                 </NavLink>
-                <Button>Compartir</Button>
+                <Button h="8" variant="outline" colorScheme="purple">
+                  Compartir
+                </Button>
               </HStack>
             </Stack>
           </CardHeader>
@@ -95,7 +109,11 @@ const DashboardPage = () => {
           <CardBody>
             <Wrap>
               <VStack spacing={"10"}>
-                <Button>Menú Online</Button>
+                <NavLink target="_blank" to={"/preview"}>
+                  <Button h={"8"} variant="outline" colorScheme="purple">
+                    Menú Online
+                  </Button>
+                </NavLink>
                 <Image src={qrcode}></Image>
                 <Text>
                   Descarga el código QR, previsualiza tu catálogo o comparte el

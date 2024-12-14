@@ -60,6 +60,10 @@ def create_producto(
         file_location = f"static/images/{imagen.filename}"
         with open(file_location, "wb") as f:
             f.write(imagen.file.read())
+        # Generar URL pública
+        imagen_url = f"/images/{imagen.filename}"
+    else:
+        imagen_url = None
 
     # Crear el objeto Producto
     db_producto = ProductoModel(
@@ -71,7 +75,7 @@ def create_producto(
         precio_unico=precio_unico,
         valor_precio=valor_precio,
         tiene_descuento=tiene_descuento,
-        imagen=file_location,  # Ruta donde se guarda la imagen si existe
+        imagen=imagen_url,  # Ruta donde se guarda la imagen si existe
     )
 
     db.add(db_producto)
@@ -103,6 +107,7 @@ def get_menu_completo(db: Session = Depends(get_db)):
                 "nombre": producto.nombre,
                 "descripcion": producto.descripcion,
                 "valor_precio": producto.valor_precio,
+                "imagen": producto.imagen
             }
             for producto in productos
         ]
@@ -132,6 +137,25 @@ def list_productos(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)
     limit = min(limit, 50)  # Limitar máximo a 50
     productos = db.query(ProductoModel).offset(skip).limit(limit).all()
     return productos
+
+
+@router.delete("/{producto_id}", response_model=dict)
+def delete_producto(producto_id: int, db: Session = Depends(get_db)):
+    """
+    Elimina un producto por su ID.
+    """
+    producto = db.query(ProductoModel).filter(
+        ProductoModel.id == producto_id).first()
+    
+    # Verificar si el producto existe
+    if not producto:
+        raise HTTPException(status_code=404, detail="Producto no encontrado")
+    
+    # Eliminar el producto
+    db.delete(producto)
+    db.commit()
+    
+    return {"message": f"Producto con ID {producto_id} eliminado exitosamente"}
 
 
 @router.get("/categoria/{categoria_id}", response_model=List[Producto])

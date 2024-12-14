@@ -5,13 +5,7 @@ import {
   HStack,
   Heading,
   Button,
-  Tag,
   Wrap,
-  Card,
-  CardHeader,
-  CardBody,
-  Text,
-  Image,
   IconButton,
   useToast,
 } from "@chakra-ui/react";
@@ -19,10 +13,9 @@ import { LuArrowLeft } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import { crearProducto } from "../../services/productos/productoService";
 import CustomForm from "../../components/form";
-import { NavLink } from "react-router-dom";
-import { formatNumberToARS } from "../../helpers";
+import { NavLink, useNavigate } from "react-router-dom";
 import { listarCategorias } from "../../services/productos/categoriaService";
-import preview from "../../assets/preview.png";
+import CardPreview from "../../components/ui/CardPreview";
 
 const ProductosAgregarPage = () => {
   const {
@@ -32,13 +25,16 @@ const ProductosAgregarPage = () => {
     control,
     watch,
   } = useForm();
-
+  const navigate = useNavigate();
   const [value, setValue] = useState("1");
   const [categorias, setCategorias] = useState([]);
+  const [previewImage, setPreviewImage] = useState(null);
   const nombre = watch("nombre");
   const descripcion = watch("descripcion");
   const precio = watch("valor_precio");
+  const watchImagen = watch("imagen");
   const toast = useToast();
+
   const onSubmit = async (data) => {
     try {
       console.log("Datos enviados:", data);
@@ -47,12 +43,12 @@ const ProductosAgregarPage = () => {
       const productoCreado = await crearProducto(data);
       toast({
         title: "Éxito",
-        description: "La categoría ha sido creada.",
+        description: "El producto ha sido creado.",
         status: "success",
-        duration: 4000,
+        duration: 6000,
         isClosable: true,
       });
-      console.log("Producto creado:", productoCreado);
+      navigate("/menu/productos", { state: { productoCreado } });
     } catch (error) {
       console.error(
         "Error al crear el producto:",
@@ -62,12 +58,26 @@ const ProductosAgregarPage = () => {
   };
 
   useEffect(() => {
+    if (watchImagen && watchImagen.length > 0) {
+      const file = watchImagen[0];
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewImage(objectUrl);
+
+      // Limpieza: revocar la URL cuando el componente se desmonte o cambie la imagen
+      return () => URL.revokeObjectURL(objectUrl);
+    } else {
+      setPreviewImage(null);
+    }
+  }, [watchImagen]);
+
+  useEffect(() => {
     const getCategorias = async () => {
       let data = await listarCategorias();
       setCategorias(data);
     };
     getCategorias();
   }, []);
+
   return (
     <Box px={"12"}>
       <HStack mb={"10"} justify={"space-between"} alignItems={"center"}>
@@ -112,27 +122,12 @@ const ProductosAgregarPage = () => {
         </VStack>
 
         <VStack align={"start"}>
-          <Tag colorScheme="red">VISTA PREVIA EN LISTADO</Tag>
-          <Card w={"lg"}>
-            <HStack align={"start"}>
-              <CardHeader py={3} pl={3} pr={0}>
-                <Image rounded="xl" w="full" objectFit="cover" src={preview} />
-              </CardHeader>
-
-              <CardBody pl={0}>
-                <HStack justify={"space-between"}>
-                  <Text>{nombre}</Text>
-                  <Text fontWeight={600}>
-                    {console.log(precio)}
-                    {precio && `$ ${formatNumberToARS(precio)}`}
-                  </Text>
-                </HStack>
-                <Text fontSize="xs" color="gray.600">
-                  {descripcion}
-                </Text>
-              </CardBody>
-            </HStack>
-          </Card>
+          <CardPreview
+            previewImage={previewImage}
+            descripcion={descripcion}
+            nombre={nombre}
+            precio={precio}
+          />
         </VStack>
       </Wrap>
     </Box>
